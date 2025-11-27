@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    image: project-backend:latest
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://mongo:27017
+    networks:
+      - appnet
+
+  frontend:
+    build: ./frontend
+    image: project-frontend:latest
+    restart: always
+    networks:
+      - appnet
+
+  mongo:
+    image: mongo:6.0
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - appnet
+
+  nginx:
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - appnet
+
+volumes:
+  mongo-data:
+
+networks:
+  appnet:
+    driver: bridge
+
