@@ -59,8 +59,8 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             set -e
-            mkdir -p /root/myapp
-            cd /root/myapp
+            mkdir -p /opt/myapp
+            cd /opt/myapp
 
             
             # If repo exists, pull; else clone
